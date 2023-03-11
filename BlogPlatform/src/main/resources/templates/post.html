@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/header :: header(${message.title})"></head>
+<body>
+
+<!-- Navigation & Logo-->
+<div th:replace="fragments/navigation :: navigation('post')"/>
+</div>
+
+<!-- Page Title -->
+<div th:replace="fragments/header :: pageTitle('Blog Post')"></div>
+
+<div class="modal fade in" th:id="'modal-del-'+${message.id}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span></button>
+                <h5 class="modal-title text-danger">Delete post</h5>
+            </div>
+            <div class="modal-body">
+                <h3>Are you sure want to delete this post and all comments?</h3>
+                <form th:id="'form-del-'+${message.id}" th:action="@{/post/delete/{id}(id=${message.id})}"
+                      th:method="DELETE">
+                    <input type="hidden" name="id" th:value="${message.id}">
+                    <input type="hidden" name="postId" th:value="${message.id}">
+                    <input type="submit" th:id="'submit-form-del-'+${message.id}" class="hidden"/>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                <label type="button" class="btn btn-primary btn-danger" th:for="'submit-form-del-'+${message.id}"><i
+                        class="fa fa-check"></i>&nbsp;Yes</label>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" th:id="'modal-edit-'+${message.id}" tabindex="-1" role="dialog"
+     th:attr="aria-labelledby=EditComment + ${message.id}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h5 class="modal-title" th:id="EditComment + ${message.id}">Edit post</h5>
+            </div>
+            <div class="modal-body">
+                <form th:id="'form-edit-'+${message.id}" th:action="@{/post/edit}" method="POST">
+                    <div class="form-group">
+                        <label for="editTitle" class="col-form-label">Title:</label>
+                        <input id="editTitle" name="editTitle" th:value="${message.title}">
+                        <label for="editText" class="col-form-label">Comment:</label>
+                        <textarea rows="10" class="form-control" id="editText" name="editText">[[${message.text}]]</textarea>
+                        <input type="hidden" name="postId" th:value="${message.id}">
+                        <input type="hidden" name="msgId" th:value="${message.id}">
+                        <input type="hidden" name="editorName" th:value="${#authentication.name}">
+                        <input type="submit" th:id="'submit-form-edit-'+${message.id}" class="hidden"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                <label type="button" class="btn btn-primary" th:for="'submit-form-edit-'+${message.id}">Edit</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="blog-post blog-single-post">
+                <div class="single-post-title">
+                    <h3 th:id="com + ${message.id}">[[${message.title}]]</h3>
+                </div>
+                <div class="single-post-info">
+                    <i class="glyphicon glyphicon-time"></i>[[${#dates.format(message.dateCreate, 'dd MMM, yyyy')}]] <a href="#comments" title="Show Comments"><i class="glyphicon glyphicon-comment"></i>[[${messageService.countAllChildByParent(message.id)}]]</a>
+                    <a th:if="${userService.isPermit({message.id}, {message.id}, {#authentication.name})}" data-toggle="modal" th:attr="data-target='#modal-del-'+${message.id}" th:href="'#com' + ${message.id}" title="Delete comment"><span class="glyphicon glyphicon-trash"></span></a>
+                    <a th:if="${userService.isPermit({message.id}, {message.id}, {#authentication.name})}" data-toggle="modal" th:attr="data-target='#modal-edit-'+${message.id}" th:href="'#com' + ${message.id}" title="Edit comment"><span class="glyphicon glyphicon-pencil"></span></a>
+                </div>
+                <div class="single-post-image">
+                    <img th:src="@{/img/blog_{id}.jpg(id=${message.id%10})}" alt="Post Title">
+                </div>
+                <div class="single-post-content">
+                    <p th:utext="${message.text}"></p>
+                </div>
+                <div class="post-coments" id="comments">
+                    <h4>Comments ([[${messageService.countAllChildByParent(message.id)}]])</h4>
+                    <div th:if="${mainComments == 0}" class="post-comments">
+                        <p>No comments, be the first...</p>
+                    </div>
+                    <th:block th:fragment="commentTree(subComments)">
+                        <ul class="post-comments">
+                            <li th:each="comment : ${subComments}">
+                                <div th:if="${#lists.isEmpty(messageService.getAllByParent(comment.id))}">
+                                    <div th:replace="fragments/comment :: comment(${comment.title}, ${comment.dateCreate}, ${comment.text}, ${comment.id}, ${message}, ${comment.author})"></div>
+                                </div>
+                                <div th:unless="${#lists.isEmpty(messageService.getAllByParent(comment.id))}">
+                                    <div th:replace="fragments/comment :: comment(${comment.title}, ${comment.dateCreate}, ${comment.text}, ${comment.id}, ${message}, ${comment.author})"></div>
+                                    <div th:include="this::commentTree(${messageService.getAllByParent(comment.id)})"/>
+                                </div>
+                            </li>
+                        </ul>
+                    </th:block>
+                    <div th:if="${mainComments > 0}" th:include="this::commentTree(${comments})"/>
+                    <h4 class="text-center">Leave a Comment</h4>
+                    <div class="comment-form-wrapper">
+                        <form th:action="@{/post/reply}" method="POST">
+                            <div class="form-group">
+                                <label for="comment-message"><i class="glyphicon glyphicon-comment"></i> <b>Your
+                                    Message</b></label>
+                                <textarea class="form-control" rows="5" id="comment-message" name="text"></textarea>
+                                <input type="hidden" name="postId" th:value="${message.id}">
+                                <input type="hidden" name="title" th:value="'Re:' + ${message.title}">
+                                <input type="hidden" name="authorName" th:value="${#authentication.name}">
+                                <input type="hidden" name="parentId" th:value="${message.id}">
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-large pull-right">Send</button>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- Javascripts -->
+<div th:replace="fragments/footer :: javascript"></div>
+
+</body>
+</html>

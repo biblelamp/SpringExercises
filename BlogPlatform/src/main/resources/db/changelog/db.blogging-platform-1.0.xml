@@ -1,0 +1,112 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="Solvik" id="#1">
+        <createTable tableName="messages">
+            <column name="message_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="text" type="text">
+                <constraints nullable="false" />
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_create" type="datetime" defaultValueDate="current_datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="date_edit" type="datetime" defaultValue="null">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_delete" type="datetime" defaultValue="null">
+                <constraints nullable="true" />
+            </column>
+            <column name="author_id" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="editor_id" type="int" defaultValue="null">
+                <constraints nullable="true" />
+            </column>
+            <column name="parent_id" type="int" defaultValue="null">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="username" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="role" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="enabled" type="smallint" defaultValueNumeric="0">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <createTable tableName="roles">
+            <column name="role_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="role_name" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="messages" baseColumnNames="author_id"
+                constraintName="messages_author_id"
+                referencedTableName="users"
+                referencedColumnNames="user_id" />
+
+        <addForeignKeyConstraint
+                baseTableName="messages" baseColumnNames="editor_id"
+                constraintName="messages_editor_id"
+                referencedTableName="users"
+                referencedColumnNames="user_id" />
+
+        <addForeignKeyConstraint
+                baseTableName="messages" baseColumnNames="parent_id"
+                constraintName="messages_parent_id"
+                referencedTableName="messages"
+                referencedColumnNames="message_id" />
+
+        <addForeignKeyConstraint
+                baseTableName="users" baseColumnNames="role"
+                constraintName="users_role_id"
+                referencedTableName="roles"
+                referencedColumnNames="role_id" />
+    </changeSet>
+
+    <changeSet author="Solvik" id="#2">
+        <insert tableName="roles">
+            <column name="role_id" value="1"/>
+            <column name="role_name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="role_id" value="2"/>
+            <column name="role_name" value="ROLE_STAFF"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="role_id" value="3"/>
+            <column name="role_name" value="ROLE_USER"/>
+        </insert>
+        <loadData tableName="users"
+                  separator=";"
+                  file="db/data/db_users.csv">
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

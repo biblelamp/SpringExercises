@@ -1,0 +1,221 @@
+openapi: 3.0.0
+
+info:
+  version: 1.0.0
+  title: Blogging Platform Rest API
+
+tags:
+  - name: UserRest
+    description: Blogging platform rest CRUD API
+
+paths:
+
+  /add:
+    post:
+      tags:
+        - UserRest
+      summary: Add one user
+      description: Add one user
+      operationId: add
+      requestBody:
+        description: Data for user
+        required: true
+        content:
+          application/json:
+            schema:
+              type: UserVO
+      responses:
+        '201':
+          description: Successful operation'
+          content:
+            application/json:
+              schema:
+                type: String
+        '404':
+          description: Request failed - No items
+
+  /getAll:
+    get:
+      tags:
+        - UserRest
+      summary: Get all records
+      description: Get all records
+      operationId: getAll
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: UserVO
+        '404':
+          description: Request failed - No items
+
+  /getAllEnabled:
+    get:
+      tags:
+        - UserRest
+      summary: Get all enabled records
+      description: Get all enabled records
+      operationId: getAllEnabled
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: UserVO
+        '404':
+          description: Request failed - No items
+
+
+  /getTopAuthors/{amount}:
+    get:
+      tags:
+        - UserRest
+      summary: Get top authors
+      description: Get users with the most posts
+      operationId: getTopAuthors
+      parameters:
+        - $ref: '#/components/parameters/amount'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: UserVO
+        '404':
+          description: Request failed - No items
+
+  /get/{id}:
+    get:
+      tags:
+        - UserRest
+      summary: Get one record by id
+      description: Get one record by id
+      operationId: get
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: UserVO
+        '404':
+          description: Request failed - No items
+
+  /getByUsername/{username}:
+    get:
+      tags:
+        - UserRest
+      summary: Get one record by username
+      description: Get one record by username
+      operationId: getByUsername
+      parameters:
+        - $ref: '#/components/parameters/username'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: UserVO
+        '404':
+          description: Request failed - No items
+
+  /update/{id}:
+    put:
+      tags:
+        - UserRest
+      summary: Update one record
+      description: Update one record
+      operationId: update
+      parameters:
+        - $ref: '#/components/parameters/id'
+      requestBody:
+        description: Data to update
+        required: true
+        content:
+          'application/json':
+            schema:
+              type: UserVO
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: String
+        '404':
+          description: Request failed - No items
+
+  /delete/{id}:
+    delete:
+      tags:
+        - UserRest
+      summary: Delete one record by id
+      description: Delete one record by id
+      operationId: delete
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: Successfully deleted
+          content:
+            application/json:
+              schema:
+                type: String
+        '404':
+          description: Request failed - No items
+
+  /restore/{id}:
+    put:
+      tags:
+        - UserRest
+      summary: Restore one record by id
+      description: Restore one record by id
+      operationId: restore
+      parameters:
+        - $ref: '#/components/parameters/id'
+      responses:
+        200:
+          description: Successfully restored
+          content:
+            application/json:
+              schema:
+                type: String
+        '404':
+          description: Request failed - No items
+
+components:
+  parameters:
+    id:
+      in: path
+      name: id
+      required: true
+      description: record id
+      schema:
+        type: integer
+    amount:
+      in: path
+      name: amount
+      required: true
+      description: amount of records
+      schema:
+        type: integer
+    username:
+      in: path
+      name: username
+      required: true
+      description: record username
+      schema:
+        type: String

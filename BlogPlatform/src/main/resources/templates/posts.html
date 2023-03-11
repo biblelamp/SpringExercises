@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/header :: header('Posts')"></head>
+<body>
+
+<!-- Navigation & Logo-->
+<div th:replace="fragments/navigation :: navigation('posts')"/></div>
+
+<!-- Page Title -->
+<div th:replace="fragments/header :: pageTitle('Posts')"></div>
+
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog" aria-labelledby="AddPost" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddPost">Add Post</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add" th:action="@{/post/add}" method="POST">
+                    <div class="form-group">
+                        <label for="messageTitle" class="col-form-label">Title:</label>
+                        <input class="form-control" id="messageTitle" name="title"/>
+                        <label for="messageText" class="col-form-label">Message:</label>
+                        <textarea rows="10" class="form-control" id="messageText" name="text"></textarea>
+
+                        <input type="hidden" name="username" th:value="${#authentication.name}">
+                        <input type="submit" id="submit-form" class="hidden"/>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary pull-left" data-dismiss="modal">Close</button>
+                <label class="btn btn-primary" for="submit-form">Add</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="post-more">
+                <a class="btn btn-small" data-toggle="modal" data-target="#modal-add" href="#com">Add post</a>
+            </div>
+            <div class="col-md-4 col-sm-6" th:each="post : ${posts.content}">
+                <div class="blog-post">
+                    <div class="post-info">
+                        <div class="post-date">
+                            <div class="date" th:text="${#dates.format(post.dateCreate, 'dd MMM, yyyy')}"></div>
+                        </div>
+                        <div class="post-comments-count">
+                            <a th:href="'/post/' + ${post.id}" title="Show Comments"><i class="glyphicon glyphicon-comment icon-white"></i>[[${service.countAllChildByParent(post.id)}]]</a>
+                        </div>
+                    </div>
+                    <a th:href="'/post/' + ${post.id}"><img th:src="@{/img/blog_{id}.jpg(id=${post.id%10})}" class="post-image" alt="Post Title"></a>
+                    <div class="post-title">
+                        <h3><a th:href="'/post/' + ${post.id}">[[${post.title}]]</a></h3>
+                    </div>
+                    <div class="post-summary">
+                        <p th:utext="${#strings.abbreviate(post.text,200)}"></p>
+                    </div>
+                    <div class="post-more">
+                        <a th:href="'/post/' + ${post.id}" class="btn btn-small">Read more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <nav th:replace="fragments/pagination :: pagination(${currentPage}, ${page}, ${totalPages})"/></nav>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- Javascripts -->
+<div th:replace="fragments/footer :: javascript"></div>
+
+</body>
+</html>

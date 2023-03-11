@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments/header :: header('')"></head>
+<body>
+
+<!-- Navigation & Logo-->
+<div th:replace="fragments/navigation :: navigation('home')"/></div>
+
+<div class="section blog-posts-wrapper">
+    <div class="container">
+        <h2>Last posts</h2>
+        <div class="row">
+            <div class="col-md-4 col-sm-6" th:each="post : ${posts}">
+                <div class="blog-post">
+                    <div class="post-info">
+                        <div class="post-date">
+                            <div class="date" th:utext="${#dates.format(post.dateCreate, 'dd MMM, yyyy')}"></div>
+                        </div>
+                        <div class="post-comments-count">
+                            <a th:href="'/post/' + ${post.id}" title="Show Comments"><i class="glyphicon glyphicon-comment icon-white"></i>[[${service.countAllChildByParent(post.id)}]]</a>
+                        </div>
+                    </div>
+                    <a th:href="'/post/' + ${post.id}"><img th:src="@{/img/blog_{id}.jpg(id=${post.id%10})}" class="post-image" alt="Post Title"></a>
+                    <div class="post-title">
+                        <h3><a th:href="'/post/' + ${post.id}">[[${post.title}]]</a></h3>
+                    </div>
+                    <div class="post-summary">
+                        <p th:utext="${#strings.abbreviate(post.text,200)}"></p>
+                    </div>
+                    <div class="post-more">
+                        <a th:href="'/post/' + ${post.id}" class="btn btn-small">Read more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <h2>Last comments</h2>
+        <div class="row">
+            <div class="col-md-4 col-sm-6" th:each="comment : ${comments}">
+                <div class="in-press press-more">
+                    <a th:href="${'/post/' + {service.getPostByComment(comment.parentId)} + '#com' + {comment.id}}" th:utext="${#strings.abbreviate(comment.text,150)}"></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <h2>Top Authors</h2>
+        <div class="row">
+            <div class="testimonial col-md-4 col-sm-6" th:each="author, state : ${topAuthors}">
+                <div class="author-photo">
+                    <img th:src="@{/img/user_{id}.png(id=${author.id%5})}">
+                </div>
+                <div class="testimonial-bubble">
+                    <div class="in-press press-more">
+                        <a th:href="'post/' + ${randomMessageToTopAuthors.get(state.index).id}"
+                           th:utext="${#strings.abbreviate(randomMessageToTopAuthors.get(state.index).text,150)}"></a>
+                    </div>
+                    <cite class="author-info">
+                        - [[${author.username}]],<br>Position <b th:text="${state.count}"></b> in authors top
+                    </cite>
+                    <div class="sprite arrow-speech-bubble"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
+<!-- Javascripts -->
+<div th:replace="fragments/footer :: javascript"></div>
+
+</body>
+</html>
