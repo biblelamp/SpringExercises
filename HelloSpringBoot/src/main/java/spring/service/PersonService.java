@@ -1,51 +1,37 @@
 package spring.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import spring.domain.Person;
+import spring.repository.PersonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class PersonService {
-    private List<Person> persons;
 
-    public PersonService() {
-        persons = new ArrayList<>();
-        persons.add(new Person("Ivan", "Ivanov"));
-        persons.add(new Person("Petr", "Petrov"));
-    }
+    @Autowired
+    PersonRepository personRepository;
 
     public List<Person> findAll() {
-        return persons;
+        return personRepository.findAll();
     }
 
     public Person findById(Integer id) {
-        for (Person person : persons) {
-            if (person.getId() == id) {
-                return person;
-            }
-        }
-        return null;
+        return personRepository.findById(id).get();
     }
 
     public void add(Person person) {
-        Person newPerson = new Person(person.getFirstName(), person.getLastName());
-        persons.add(newPerson);
+        Person newPerson = new Person(person.getFirstname(), person.getLastname());
+        personRepository.save(newPerson);
     }
 
     public void update(Person person) {
-        Person updatePerson = findById(person.getId());
-        if (updatePerson != null) {
-            updatePerson.setFirstName(person.getFirstName());
-            updatePerson.setLastName(person.getLastName());
-        }
+        personRepository.save(person);
     }
 
     public void delete(Integer id) {
-        Person deletePerson = findById(id);
-        if (deletePerson != null) {
-            persons.remove(deletePerson);
-        }
+        personRepository.deleteById(id);
     }
 }
