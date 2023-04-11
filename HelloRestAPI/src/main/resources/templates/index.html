@@ -11,13 +11,13 @@
             <th>id</th>
             <th>Name</th>
             <th>Surname</th>
-            <th colspan="3">Action</th>
+            <th colspan="2">Action</th>
         </tr>
         <tr th:each="person : ${persons}">
             <td th:utext="${person.id}">...</td>
             <td th:utext="${person.firstName}">...</td>
             <td th:utext="${person.lastName}">...</td>
-            <td th:utext="${person.position.name}">...</td>
+            <!--<td th:utext="${person.position.name}">...</td>-->
             <td><a th:href="@{/update/{id}(id=${person.id})}">edit</a></td>
             <td><a th:href="@{/delete/{id}(id=${person.id})}">delete</a></td>
         </tr>
