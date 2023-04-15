@@ -1,0 +1,36 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="#1" author="sergey">
+        <createTable tableName="user">
+            <column name="user_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <column name="name" type="varchar(25)">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar(25)">
+                <constraints nullable="false" />
+            </column>
+            <column name="role" type="varchar(12)" />
+        </createTable>
+
+        <createTable tableName="account">
+            <column name="account_id" type="int">
+                <constraints primaryKey="true" />
+            </column>
+            <!--TODO-->
+        </createTable>
+
+        <createTable tableName="transaction">
+            <column name="transaction_id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" />
+            </column>
+            <!--TODO-->
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
