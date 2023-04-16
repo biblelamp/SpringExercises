@@ -15,22 +15,44 @@
             <column name="password" type="varchar(25)">
                 <constraints nullable="false" />
             </column>
-            <column name="role" type="varchar(12)" />
+            <column name="role" type="varchar(12)">
+                <constraints nullable="false" />
+            </column>
         </createTable>
 
         <createTable tableName="account">
             <column name="account_id" type="int">
                 <constraints primaryKey="true" />
             </column>
-            <!--TODO-->
+            <column name="amount" type="number(12,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id" type="int" />
         </createTable>
 
         <createTable tableName="transaction">
             <column name="transaction_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" />
             </column>
-            <!--TODO-->
+            <column name="account_id" type="int" />
+            <column name="date_time" type="timestamp"/>
+            <column name="amount" type="number(12,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)" />
         </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="account" baseColumnNames="user_id"
+                constraintName="account_user_id"
+                referencedTableName="user"
+                referencedColumnNames="user_id" />
+
+        <addForeignKeyConstraint
+                baseTableName="transaction" baseColumnNames="account_id"
+                constraintName="transaction_account_id"
+                referencedTableName="account"
+                referencedColumnNames="account_id" />
     </changeSet>
 
 </databaseChangeLog>
