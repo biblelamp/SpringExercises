@@ -1,10 +1,6 @@
 package com.simplebank.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 public class Account {
@@ -12,7 +8,10 @@ public class Account {
     @Id
     private int accountId;
 
-    private float amount;
+    private float balance;
+
+    @Enumerated(EnumType.STRING)
+    private EnumStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
     @JoinColumn(name = "user_id", nullable = false)
@@ -26,12 +25,20 @@ public class Account {
         this.accountId = accountId;
     }
 
-    public float getAmount() {
-        return amount;
+    public float getBalance() {
+        return balance;
     }
 
-    public void setAmount(float amount) {
-        this.amount = amount;
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
+
+    public EnumStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnumStatus status) {
+        this.status = status;
     }
 
     public User getUser() {

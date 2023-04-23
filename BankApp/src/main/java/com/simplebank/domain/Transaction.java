@@ -1,6 +1,12 @@
 package com.simplebank.domain;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -14,9 +20,13 @@ public class Transaction {
     @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
+    private Integer accountFromTo;
+
+    private Integer bankCode;
+
     private OffsetDateTime dateTime;
 
-    private float amount;
+    private Float amount;
 
     private String description;
 
@@ -36,6 +46,22 @@ public class Transaction {
         this.account = account;
     }
 
+    public Integer getAccountFromTo() {
+        return accountFromTo;
+    }
+
+    public void setAccountFromTo(Integer accountFromTo) {
+        this.accountFromTo = accountFromTo;
+    }
+
+    public Integer getBankCode() {
+        return bankCode;
+    }
+
+    public void setBankCode(Integer bankCode) {
+        this.bankCode = bankCode;
+    }
+
     public OffsetDateTime getDateTime() {
         return dateTime;
     }
@@ -44,11 +70,11 @@ public class Transaction {
         this.dateTime = dateTime;
     }
 
-    public float getAmount() {
+    public Float getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(Float amount) {
         this.amount = amount;
     }
 

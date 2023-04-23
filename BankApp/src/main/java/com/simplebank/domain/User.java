@@ -21,6 +21,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserRole role;
 
+    @Enumerated(EnumType.STRING)
+    private EnumStatus status;
+
     public int getUserId() {
         return userId;
     }
@@ -51,5 +54,13 @@ public class User {
 
     public void setType(UserRole role) {
         this.role = role;
+    }
+
+    public EnumStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(EnumStatus status) {
+        this.status = status;
     }
 }
