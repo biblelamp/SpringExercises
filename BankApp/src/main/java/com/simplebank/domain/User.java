@@ -6,23 +6,27 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="bank_user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userId;
 
+    @JoinColumn(unique = true)
     private String name;
 
     private String password;
 
     @Enumerated(EnumType.STRING)
-    private UserRole role;
+    private UserRole userRole;
 
     @Enumerated(EnumType.STRING)
-    private EnumStatus status;
+    private EnumStatus userStatus;
 
     public int getUserId() {
         return userId;
@@ -48,19 +52,19 @@ public class User {
         this.password = password;
     }
 
-    public UserRole getRole() {
-        return role;
+    public UserRole getUserRole() {
+        return userRole;
     }
 
-    public void setType(UserRole role) {
-        this.role = role;
+    public void setUserRole(UserRole userRole) {
+        this.userRole = userRole;
     }
 
-    public EnumStatus getStatus() {
-        return status;
+    public EnumStatus getUserStatus() {
+        return userStatus;
     }
 
-    public void setStatus(EnumStatus status) {
-        this.status = status;
+    public void setUserStatus(EnumStatus userStatus) {
+        this.userStatus = userStatus;
     }
 }

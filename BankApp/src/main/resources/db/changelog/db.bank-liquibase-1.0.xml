@@ -5,38 +5,38 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
 
     <changeSet id="#1" author="sergey">
-        <createTable tableName="user">
+        <createTable tableName="bank_user">
             <column name="user_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" />
             </column>
             <column name="name" type="varchar(25)">
-                <constraints nullable="false" />
+                <constraints nullable="false" unique="true" />
             </column>
             <column name="password" type="varchar(25)">
                 <constraints nullable="false" />
             </column>
-            <column name="role" type="varchar(12)">
+            <column name="user_role" type="varchar(12)">
                 <constraints nullable="false" />
             </column>
-            <column name="status" type="varchar(12)">
+            <column name="user_status" type="varchar(12)">
                 <constraints nullable="false" />
             </column>
         </createTable>
 
-        <createTable tableName="account">
+        <createTable tableName="bank_account">
             <column name="account_id" type="int">
                 <constraints primaryKey="true" />
             </column>
-            <column name="amount" type="number(12,2)">
+            <column name="balance" type="decimal(12,2)">
                 <constraints nullable="false" />
             </column>
-            <column name="status" type="varchar(12)">
+            <column name="account_status" type="varchar(12)">
                 <constraints nullable="false" />
             </column>
             <column name="user_id" type="int" />
         </createTable>
 
-        <createTable tableName="transaction">
+        <createTable tableName="bank_transaction">
             <column name="transaction_id" type="int" autoIncrement="true">
                 <constraints primaryKey="true" />
             </column>
@@ -44,23 +44,27 @@
             <column name="account_from_to" type="int" />
             <column name="bank_code" type="int" />
             <column name="date_time" type="timestamp"/>
-            <column name="amount" type="number(12,2)">
+            <column name="amount" type="decimal(12,2)">
                 <constraints nullable="false" />
             </column>
             <column name="description" type="varchar(255)" />
         </createTable>
 
         <addForeignKeyConstraint
-                baseTableName="account" baseColumnNames="user_id"
-                constraintName="account_user_id"
-                referencedTableName="user"
+                baseTableName="bank_account" baseColumnNames="user_id"
+                constraintName="bank_account_user_id"
+                referencedTableName="bank_user"
                 referencedColumnNames="user_id" />
 
         <addForeignKeyConstraint
-                baseTableName="transaction" baseColumnNames="account_id"
-                constraintName="transaction_account_id"
-                referencedTableName="account"
+                baseTableName="bank_transaction" baseColumnNames="account_id"
+                constraintName="bank_transaction_account_id"
+                referencedTableName="bank_account"
                 referencedColumnNames="account_id" />
+
+        <sql dbms="postgresql">INSERT INTO bank_user (name, password, user_role, user_status)
+	        VALUES('admin', 'admin', 'ADMIN', 'ACTIVE')
+	        ON CONFLICT (name) DO NOTHING;</sql>
     </changeSet>
 
 </databaseChangeLog>
