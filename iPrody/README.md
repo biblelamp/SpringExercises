@@ -1,0 +1,14 @@
+- Establish service
+- Establish infrastructure
+- Establish E2E Testing Application
+- Containers for testing purposes
+- Logging & Distributed tracing
+- Enable TLS
+- Monitoring support
+- Propagate Spring Actuator Endpoint to OpenAPI
+- Product Domain
+- REST API
+- Global exception handling
+- Integration/E2E Testing data
+- Dashboard
+- Performance testing
