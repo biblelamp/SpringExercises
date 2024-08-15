@@ -1,0 +1,40 @@
+name: Build on Feature Branch Push
+
+on:
+  pull_request:
+    branches: [ "develop" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven
+
+      - name: Clean with Maven
+        run: mvn -B clean
+
+      - name: Compile with Maven
+        run: mvn -B compile
+
+      - name: Run Checkstyle
+        run: mvn -B checkstyle:check
+
+      - name: Test with Maven
+        run: mvn -B test
