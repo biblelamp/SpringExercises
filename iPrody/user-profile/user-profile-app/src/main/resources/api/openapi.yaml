@@ -1,0 +1,80 @@
+openapi: 3.0.2
+info:
+  title: User Profile API
+  version: 1.0.0
+tags:
+  - name: user
+    description: User profile operations
+paths:
+  /user:
+    post:
+      tags:
+        - user
+      operationId: addUser
+      description: Add user
+      requestBody:
+        description: data for adding a user
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDTO'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: integer
+  /user/{id}:
+    get:
+      tags:
+        - user
+      operationId: getUserById
+      description: Get user by id
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: id of user
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDTO'
+  /user/all:
+    get:
+      tags:
+        - user
+      operationId: getAllUser
+      description: Get all users
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserDTO'
+components:
+  schemas:
+    UserDTO:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        id:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+      description: User data class
+
