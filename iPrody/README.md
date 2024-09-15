@@ -1,14 +1,35 @@
 - Establish service
 - Establish infrastructure
-- Establish E2E Testing Application
-- Containers for testing purposes
+- Product Domain
+- REST API
 - Logging & Distributed tracing
 - Enable TLS
 - Monitoring support
 - Propagate Spring Actuator Endpoint to OpenAPI
-- Product Domain
-- REST API
 - Global exception handling
+- Establish E2E Testing Application
+- Containers for testing purposes
 - Integration/E2E Testing data
 - Dashboard
 - Performance testing
+
+## Establish infrastructure
+- Checkstyle
+  - https://docs.gradle.org/current/userguide/checkstyle_plugin.html
+  - add checkstyle configuration file (this is a default configuration and a team may change/extend it if and only if such a change approved by Team Lead)
+  - include into a gradle build (must be executed as a part of build task)
+- Dockerfile for service
+  - Expose standard 8080 and 8443 port
+- GitHub actions contains:
+  - build a project (service only) on every push to a feature branch. NOTE: it should include running checkstyle and tests
+    - https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+  - build an image and store it to GitHub Container Registry on every merge to develop branch
+    - with tag latest
+  - store an artifact in GitHub Packages on every merge to develop branch
+- Docker compose that includes:
+  - database start-up (PostgreSQL)
+    - data folder must be mapped to host local directory
+    - service (user-profile) start-up (from team GitHub Container Registry)
+   - database GUI (PgAdmin)
+     - https://www.pgadmin.org/download/pgadmin-4-container/
+     - available on 8888 port
