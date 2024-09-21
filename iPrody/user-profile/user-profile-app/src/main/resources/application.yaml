@@ -1,5 +1,5 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/elza
+    url: jdbc:postgresql://localhost:5432/user-profile
     username: postgres
     password: root
