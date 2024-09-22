@@ -23,7 +23,11 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<UserDTO> getUserById(Integer id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+        UserDTO userDTO = userService.getUserById(id);
+        if (userDTO != null) {
+            return ResponseEntity.ok(userDTO);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @Override
