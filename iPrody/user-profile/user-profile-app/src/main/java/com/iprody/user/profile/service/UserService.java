@@ -3,6 +3,8 @@ package com.iprody.user.profile.service;
 import com.iprody.user.profile.controller.dto.UserDTO;
 import com.iprody.user.profile.domain.UserProfile;
 import com.iprody.user.profile.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.Optional;
 
 @Service
 public class UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -23,6 +27,8 @@ public class UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user = userRepository.save(user);
+
+        logger.info("Added user, userId: {}", user.getId());
         return user.getId();
     }
 
@@ -31,6 +37,8 @@ public class UserService {
         if (user.isPresent()) {
             return mapper.userToDTO(user.get());
         }
+
+        logger.error("Not found user, userId: {}", id);
         return null;
     }
 

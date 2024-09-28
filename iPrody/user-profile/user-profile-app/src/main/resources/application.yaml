@@ -3,3 +3,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/user-profile
     username: postgres
     password: root
+
+logging:
+  file:
+    name: user-profile.log
+  level:
+    # there are the following levels: ERROR, INFO, DEBUG, TRACE
+    com.iprody.user.profile: INFO
+    #org.springframework.web.servlet: TRACE
+    #org.hibernate.SQL: DEBUG
