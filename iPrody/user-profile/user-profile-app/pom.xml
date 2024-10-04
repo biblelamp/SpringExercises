@@ -105,6 +105,25 @@
                             </configOptions>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>openapi-test-client</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>java</generatorName>
+                            <inputSpec>${project.basedir}/src/main/resources/api/openapi.yaml</inputSpec>
+                            <output>${project.build.directory}/generated-test-sources/api</output>
+                            <apiPackage>com.iprody.user.profile.test.controller</apiPackage>
+                            <modelPackage>com.iprody.user.profile.test.controller.dto</modelPackage>
+                            <configOptions>
+                                <useJakartaEe>true</useJakartaEe>
+                                <library>resttemplate</library><!-- default: okhttp-gson -->
+                                <useAbstractionForFiles>true</useAbstractionForFiles>
+                            </configOptions>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
         </plugins>
