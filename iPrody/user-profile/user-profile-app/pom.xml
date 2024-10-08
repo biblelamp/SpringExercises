@@ -14,6 +14,10 @@
 
     <properties>
         <java.version>21</java.version>
+        <springdoc-openapi.version>2.6.0</springdoc-openapi.version>
+        <swagger-annotations.version>2.2.22</swagger-annotations.version>
+        <jackson-databind.version>0.2.6</jackson-databind.version>
+        <openapi-generator.version>7.1.0</openapi-generator.version>
     </properties>
 
     <dependencies>
@@ -42,19 +46,19 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.6.0</version>
+            <version>${springdoc-openapi.version}</version>
         </dependency>
 
         <!-- io.swagger.annotations.* -->
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>2.2.22</version>
+            <version>${swagger-annotations.version}</version>
         </dependency>
         <dependency>
             <groupId>org.openapitools</groupId>
             <artifactId>jackson-databind-nullable</artifactId>
-            <version>0.2.6</version>
+            <version>${jackson-databind.version}</version>
         </dependency>
 
         <!-- h2 database for test -->
@@ -84,7 +88,7 @@
             <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.1.0</version>
+                <version>${openapi-generator.version}</version>
                 <executions>
                     <execution>
                         <id>openapi-spring</id>
