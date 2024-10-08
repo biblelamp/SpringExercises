@@ -1,6 +1,6 @@
 package com.iprody;
 
-import com.iprody.user.profile.Application;
+import com.iprody.user.profile.UserProfileApplication;
 import com.iprody.user.profile.test.ApiClient;
 import com.iprody.user.profile.test.controller.UserApi;
 import com.iprody.user.profile.test.controller.dto.UserDTO;
@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ContextConfiguration;
 
-@ContextConfiguration(classes = Application.class)
+@ContextConfiguration(classes = UserProfileApplication.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class UserControllerTest {
 
