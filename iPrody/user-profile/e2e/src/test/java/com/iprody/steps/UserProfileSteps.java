@@ -43,6 +43,6 @@ public class UserProfileSteps {
 
     @Then("Response code is {int}")
     public void responseCodeIs(int responseStatusCode) {
-        Assertions.assertEquals(httpStatusCode.value(), responseStatusCode);
+        Assertions.assertEquals(responseStatusCode, httpStatusCode.value());
     }
 }
