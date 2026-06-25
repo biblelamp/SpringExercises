@@ -3,3 +3,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/news
     username: postgres
     password: root
+
+web-reader:
+  interval: 60s
+  channels:
+    - pozor_brno
+    - czech_info
+    - vinegret_cz
